@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>developer, designer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+      // Set a random favicon (seeded) using Picsum.photos
+      (function setRandomFavicon(){
+        try {
+          const id = Date.now().toString(36) + Math.floor(Math.random()*1000);
+          const url = `https://picsum.photos/seed/${id}/64`;
+          let link = document.querySelector("link[rel~='icon']");
+          if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            link.type = 'image/png';
+            document.getElementsByTagName('head')[0].appendChild(link);
+          }
+          link.href = url;
+        } catch (e) {
+          console.error('favicon set failed', e);
+        }
+      })();
+    </script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #fff;
+      font-family: 'Space Mono', monospace;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: inherit;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      filter: blur(5px) brightness(0.5);
+      z-index: -1;
+    }
+
+    a {
+      position: absolute;
+      font-size: 2rem;
+      text-decoration: none;
+      color: #ffffff;
+      user-select: none;
+      will-change: transform;
+      transition: color 0.3s ease;
+      z-index: 1;
+    }
+
+    a:hover, a:focus {
+      color: black;
+      outline: none;
+      font-size: x-large;
+    }
+
+    a:focus-visible {
+      outline: 2px solid #ffcc00;
+    }
+
+    /* Controls: full-width bottom bar */
+    .controls {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      z-index: 999;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 8px 16px;
+      background: rgba(0,0,0,0.18);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    .controls button {
+      background: rgba(255,255,255,0.06);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-family: inherit;
+      backdrop-filter: none;
+      flex: 1;
+      margin: 0 6px;
+    }
+
+    .controls button:hover { background: rgba(255,255,255,0.12); }
+
+    @media (max-width: 600px) {
+      .controls { flex-direction: column; height: auto; padding: 8px; }
+      .controls button { margin: 6px 0; width: 100%; }
+    }
+
+    /* Stopped state for links */
+    a.stopped {
+      background: #ffffff;
+      color: #000000 !important;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 600px) {
+      a {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="">My Name is Nikolai Baida</a>
+  <a href="">I'm fullstack web developer,</a>
+  <a href="">and researcher.</a>
+  <a href="">passionate about automation, data and AI.</a>
+  <a href="">in Copenhagen, Denmark.</a>
+  <a href="mailto:nikolai.baida@gmail.com?subject=Let's%20collaborate!">Reach me nikolai.baida@gmail.com</a>
+  <a href="">Exploring grounds between humans and technology,</a>
+  <a href="mailto:nikolai.baida@gmail.com?subject=Let's%20collaborate!">Open for collaborations.</a>
+  <a href="https://drive.google.com/file/d/1PluycHojXHuEwg5oCjVC34__lto_9eao/view?usp=sharinghttps://drive.google.com/file/d/1PluycHojXHuEwg5oCjVC34__lto_9eao/view?usp=sharing">Resume</a>
+  <a href="#" id="quote-link" style="font-weight: 400; font-size: 1.2rem; font-style: italic;" data-quote-prefix='"' data-quote-suffix='"'></a>
+
+  <div class="controls">
+    <button id="stop-btn">STOP</button>
+    <button id="reset-btn">RESET</button>
+  </div>
+
+  <script>
+    // Fetch random background image on page load
+    async function setRandomBackground() {
+      try {
+        // Using Picsum Photos API - no API key required
+        const randomId = Math.floor(Math.random() * 1000);
+        const imageUrl = `https://picsum.photos/1920/1080?random=${randomId}`;
+        document.body.style.backgroundImage = `url('${imageUrl}')`;
+      } catch (error) {
+        console.error('Failed to fetch background image:', error);
+        // Fallback to a default gradient
+        document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+      }
+    }
+
+    // Random quotes list
+    const quotes = [
+      "'Work is how we shape the world; rest is how we remember why it matters.' - Unknown",
+      "'Success at work means nothing if you are a stranger in your own life.' - Unknown",
+      "'Productivity is only progress when it serves a life you actually want to live.' - Unknown",
+      "'Balance is created, not found, in the small choices of every ordinary day' - Unknown",
+      "'Life expands in the same direction as your curiosity, not your comfort.' - Unknown",
+      "'Meaning is less about what happens and more about how you choose to respond.' - Unknown",
+      "'The pace of your days should follow your values, not your notifications.' - Unknown",
+      "'Nature is the oldest teacher, and it keeps repeating the lesson of patience.' - Unknown",
+      "'When the forest grows quiet, the noise inside you finally has to listen.' - Unknown",
+      "'To protect the earth is to protect every future breath you will take.' - Unknown",
+      "'Technology is at its best when it makes you more present, not more distracted.' - Unknown",
+      "'Every new tool asks the same question: will this help you care more, or less?' - Unknown",
+      "'The danger is not that machines learn to think, but that people forget to.' - Unknown",
+      "'Better code will never replace the need for better compassion.' - Unknown",
+      "'Humanity grows whenever someone chooses kindness over convenience.' - Unknown",
+      "'We are most human when we pause long enough to understand before we judge.' - Unknown",
+      "'Real strength is the decision to stay kind in an unkind moment.' - Unknown",
+      "'Community is built from small, consistent acts of good done on purpose.' - Unknown",
+      "'Your work is only a chapter; the people you love are the whole book.' - Unknown",
+      "'Let technology record your days, but let your heart decide why they mattered.' - Unknown"
+    ];
+
+    // Set random quote on page load
+    function setRandomQuote() {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      const quoteElement = document.getElementById('quote-link');
+      quoteElement.textContent = quotes[randomIndex];
+      console.log('Quote loaded:', quotes[randomIndex]);
+    }
+
+    setRandomBackground();
+    setRandomQuote();
+
+    // Initialize animation and controls
+    let paused = false;
+
+    const stopBtn = document.getElementById('stop-btn');
+    const resetBtn = document.getElementById('reset-btn');
+
+    if (stopBtn) {
+      stopBtn.addEventListener('click', () => {
+        paused = !paused;
+        stopBtn.textContent = paused ? 'RESUME' : 'STOP';
+      });
+    }
+    if (resetBtn) {
+      resetBtn.addEventListener('click', () => {
+        location.reload();
+      });
+    }
+
+    const texts = document.querySelectorAll('a');
+    const speed = 0.25; // pixels per millisecond
+    const bouncingTexts = [];
+
+    const controlsBar = document.querySelector('.controls');
+    function getControlsHeight() {
+      return controlsBar ? controlsBar.offsetHeight : 0;
+    }
+    let controlsHeight = getControlsHeight();
+
+      texts.forEach(el => {
+        const w = el.offsetWidth;
+        const h = el.offsetHeight;
+        const x = Math.random() * Math.max(0, (window.innerWidth - w));
+        const y = Math.random() * Math.max(0, (window.innerHeight - controlsHeight - h));
+        const dx = (Math.random() - 0.5) * speed * 2;
+        const dy = (Math.random() - 0.5) * speed * 2;
+        bouncingTexts.push({ el, x, y, dx, dy, w, h, frozenUntil: 0 });
+
+        // Add hover listeners for freeze effect
+        el.addEventListener('mouseenter', () => {
+          const obj = bouncingTexts.find(b => b.el === el);
+          if (obj) {
+            obj.frozenUntil = performance.now() + 10000; // 10 seconds
+            // immediate visual feedback
+            obj.el.classList.add('stopped');
+          }
+        });
+      });
+
+      let lastTime = performance.now();
+
+      function animate(time) {
+        const now = performance.now();
+        if (paused) {
+          // mark all as stopped while paused
+          bouncingTexts.forEach(obj => obj.el.classList.add('stopped'));
+          lastTime = time;
+          requestAnimationFrame(animate);
+          return;
+        }
+        const delta = time - lastTime;
+        lastTime = time;
+
+        // Move all texts
+        bouncingTexts.forEach(obj => {
+          const isFrozen = now < obj.frozenUntil;
+          if (isFrozen) {
+            // keep visual stopped state
+            obj.el.classList.add('stopped');
+            return;
+          } else {
+            obj.el.classList.remove('stopped');
+          }
+
+          obj.x += obj.dx * delta;
+          obj.y += obj.dy * delta;
+
+          // Bounce on walls
+          if (obj.x <= 0 || obj.x + obj.w >= window.innerWidth) {
+            obj.dx *= -1;
+            obj.x = Math.max(0, Math.min(obj.x, window.innerWidth - obj.w));
+          }
+          if (obj.y <= 0 || obj.y + obj.h >= window.innerHeight - controlsHeight) {
+            obj.dy *= -1;
+            obj.y = Math.max(0, Math.min(obj.y, window.innerHeight - controlsHeight - obj.h));
+          }
+        });
+
+        // Handle collisions between texts
+        for (let i = 0; i < bouncingTexts.length; i++) {
+          for (let j = i + 1; j < bouncingTexts.length; j++) {
+            const a = bouncingTexts[i];
+            const b = bouncingTexts[j];
+            if (isColliding(a, b)) {
+              // swap directions (simple elastic collision)
+              const tempDx = a.dx;
+              const tempDy = a.dy;
+              a.dx = b.dx;
+              a.dy = b.dy;
+              b.dx = tempDx;
+              b.dy = tempDy;
+
+              // move them slightly apart to avoid sticking
+              a.x += a.dx * delta * 0.2;
+              a.y += a.dy * delta * 0.2;
+              b.x += b.dx * delta * 0.2;
+              b.y += b.dy * delta * 0.2;
+            }
+          }
+        }
+
+        // Apply transforms
+        bouncingTexts.forEach(obj => {
+          obj.el.style.transform = `translate(${obj.x}px, ${obj.y}px)`;
+        });
+
+        requestAnimationFrame(animate);
+      }
+
+      function isColliding(a, b) {
+        return !(
+          a.x + a.w < b.x ||
+          a.x > b.x + b.w ||
+          a.y + a.h < b.y ||
+          a.y > b.y + b.h
+        );
+      }
+
+      window.addEventListener('resize', () => {
+        controlsHeight = getControlsHeight();
+        bouncingTexts.forEach(obj => {
+          obj.w = obj.el.offsetWidth;
+          obj.h = obj.el.offsetHeight;
+          obj.x = Math.min(obj.x, window.innerWidth - obj.w);
+          obj.y = Math.min(obj.y, Math.max(0, window.innerHeight - controlsHeight - obj.h));
+        });
+      });
+
+      requestAnimationFrame(animate);
+
+  </script>
+</body>
+</html>
